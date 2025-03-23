@@ -2,6 +2,7 @@
 
 import pandas as pd
 import xgboost as xgb
+import numpy as np
 from sklearn.preprocessing import OrdinalEncoder
 
 # 1. Load data
@@ -40,4 +41,4 @@ modelFit = model.fit(X, y)
 
 # 6. Predict on test set
 pred = modelFit.predict(X_test)
-pred = pred.astype(int)
+pred = np.array(pred, dtype=int).tolist()  # convert to list of integers
