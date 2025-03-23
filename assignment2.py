@@ -26,11 +26,12 @@ test_df[categorical_cols] = encoder.transform(test_df[categorical_cols])
 # Make sure test has the same features
 X_test = test_df[X.columns]
 
-# 4. Define model
 model = xgb.XGBClassifier(
-    n_estimators=100,
-    max_depth=4,
-    learning_rate=0.1,
+    n_estimators=300,
+    max_depth=6,
+    learning_rate=0.05,
+    subsample=0.8,
+    colsample_bytree=0.8,
     random_state=42,
     use_label_encoder=False,
     eval_metric='logloss'
@@ -39,6 +40,5 @@ model = xgb.XGBClassifier(
 # 5. Fit model
 modelFit = model.fit(X, y)
 
-# 6. Predict on test set
-pred = modelFit.predict(X_test)
-pred = np.array(pred, dtype=int).tolist()  # convert to list of integers
+probs = modelFit.predict_proba(X_test)[:, 1]  # get probability of class 1
+pred = (probs >= 0.5).astype(int).tolist()
